@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>进制转换</title>
+    <link href="https://tool.lu/favicon.ico" rel="SHORTCUT ICON">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        input{
+            display: block;
+            border:1px solid #090;
+            width: 200px;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            margin: 50px auto;
+            text-indent: 2em;
+        }
+        p{
+            width: 180px;
+            padding-left: 10px;
+            padding-right: 10px;
+            height: 40px;
+            /*background: #090;*/
+            color: #090;
+            line-height: 40px;
+            margin: 0 auto;
+        }
+        div{
+            /*position: absolute;
+            top: 500px;
+            left: 200px;*/
+            
+            width: 180px;
+            padding-left: 0px;
+            padding-right: 0px;
+            height: 30px;
+            /*background: #090;*/
+            /*color: #fff;*/
+            line-height: 40px;
+            margin: 0 auto;
+            
+        }
+        select{
+        	width: 180px;
+            padding-left: 20px;
+            padding-right: 0px;
+            height: 30px;
+            line-height: 40px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <select name="title" id="title" style="width:180px; ">
+        <option value="1">十进制转二进制</option>
+        <option value="2">十进制转八进制</option>
+        <option value="3">十进制转十六进制</option>
+
+        <option value="4">二进制转八进制</option>
+        <option value="5">二进制转十进制</option>
+        <option value="6">二进制转十六进制</option>
+
+        <option value="7">八进制转二进制</option>
+        <option value="8">八进制转十进制</option>
+        <option value="9">八进制转十六进制</option>
+
+        <option value="10">十六进制转二进制</option>
+        <option value="11">十六进制转八进制</option>
+        <option value="12">十六进制转十进制</option>
+
+    </select><br/>
+</div>
+    <input type="text" id='in' disable='disable' value="" onfocus="myFunction(this)">
+    <p id="outText"></p>
+    <script>
+        var oBtn = document.getElementById('in');
+        var oTi = document.getElementById('outText');
+        if('oninput' in oBtn){ 
+                oBtn.addEventListener("input",getWord,false); 
+            }else{ 
+                oBtn.onpropertychange = getWord; 
+            }
+       
+        function getWord(){
+            var num = oBtn.value;
+
+            if (num.length == 0) {
+                oTi.innerHTML = "";
+            }else{
+                oTi.innerHTML = test(num);
+            }
+            
+        }
+
+    function test(index){
+        var type=document.getElementById("title");
+        var tynum,to;
+        for(var i=0;i<type.length;i++){ 
+            if(type[i].selected)
+                tynum=parseInt(type[i].value);
+        }
+
+        switch(tynum){
+            case(1):to=parseInt(index).toString(2);break;
+            case(2):to=parseInt(index).toString(8);break;
+            case(3):to=parseInt(index).toString(16);break;
+
+            case(4):to=parseInt(index,2).toString(8);break; 
+            case(5):to=parseInt(index,2);break;
+            case(6):to=parseInt(index,2).toString(16);break; 
+
+            case(7):to=parseInt(index,8).toString(2);break; 
+            case(8):to=parseInt(index,8);break;
+            case(9):to=parseInt(index,8).toString(16);break; 
+
+            case(10):to=parseInt(index,16).toString(2);break; 
+            case(11):to=parseInt(index,16).toString(8);break; 
+            case(12):to=parseInt(index,16);break;
+
+        }
+        if(isNaN(to) & tynum != 3 & tynum != 6 & tynum != 9){
+            to="输入非法字符了哦"
+        }
+    return to;
+
+    }
+
+    function myFunction(x){
+        x.value = "";
+        document.getElementById('outText').innerHTML = "";
+    }
+
+    </script>
+</body>
+</html

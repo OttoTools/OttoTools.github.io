@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>视频工具</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://wuotto.github.io/HomePage/images/favicon.ico" />
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  </head>
+  <body>
+
+    <div id="app-1" >
+      <!-- <input v-model="message"> -->
+      <textarea rows="10" cols="30" v-model="message">
+      	
+      </textarea>
+      <p>复制想要播放的视频链接，然后点击按钮就可以播放辣~</p>
+      <button v-on:click="seg1">频道1</button>
+      <button v-on:click="seg2" style="margin-left: 30px">频道2</button>
+      <button v-on:click="seg3" style="margin-left: 30px">频道3</button>
+		</div>
+
+    
+
+    <script >
+
+    var app1 = new Vue({
+      				el: '#app-1',
+      				data(){
+                
+                return {
+                    message: ""
+        					}
+              },
+                methods:{
+                  seg1: function () {
+
+                    var urlStr = "http://api.baiyug.cn/vip/index.php?url=" + this.message;
+                    window.location.href = urlStr;
+
+                  },
+                  seg2: function () {
+
+                     var urlStr = "http://jiexi.071811.cc/jx.php?url=" + this.message;
+                    window.location.href = urlStr;
+                  },
+                  seg3: function () {
+
+                     var urlStr = "http://www.sjzvip.com/jiexi1.php?url=" + this.message;
+                    window.location.href = urlStr;
+                  }
+
+                }
+    				})
+
+    </script>
+  </body>
+</html>

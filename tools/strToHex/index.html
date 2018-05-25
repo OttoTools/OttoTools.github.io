@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>hex转str</title>
+	  <link href="https://tool.lu/favicon.ico" rel="SHORTCUT ICON">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+<style>
+* { 
+  font-size:12px; 
+  font-family:Verdana,宋体; 
+}
+
+</style>
+  </head>
+  <body>
+	<div id="app-1">
+  		<textarea cols="200" rows="30" v-model="message">
+  			{{ message }}
+		</textarea>
+    <p> </p>
+  		<button v-on:click="hex2str">字符串(<u>S</u>tr)</button>
+  		<button v-on:click="str2hex">十六进制(<u>H</u>ex)</button>
+	</div>
+
+<script type="text/javascript">
+	var app1 = new Vue({
+  		el: '#app-1',
+  		data: {
+    		message: ''
+  		},
+  		methods: {
+    		hex2str: function () {
+      			var str = this.message
+      			this.message = hexCharCodeToStr(str)
+    		},
+    		str2hex: function () {
+      			var hexStr = this.message
+      			this.message = strToHexCharCode(hexStr)
+    		}
+  		}
+	})
+
+	function strToHexCharCode(str) {
+		if(str === "")
+			return "";
+		var hexCharCode = [];
+		for(var i = 0; i < str.length; i++) {
+			hexCharCode.push((str.charCodeAt(i)).toString(16));
+		}
+	return hexCharCode.join("");
+	}
+
+	function hexCharCodeToStr(hexCharCodeStr) {
+		var trimedStr = hexCharCodeStr.trim();
+		var rawStr = trimedStr;
+		var curCharCode;
+		var resultStr = [];
+		for(var i = 0; i < rawStr.length;i = i + 2) {
+			curCharCode = parseInt(rawStr.substr(i, 2), 16); // ASCII Code Value
+			resultStr.push(String.fromCharCode(curCharCode));
+		}
+	return resultStr.join("");
+	}
+</script>
+  </body>
+</html>
