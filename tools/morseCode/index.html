@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Morse电码 编码/解码</title>
+	  <link href="https://tool.lu/favicon.ico" rel="SHORTCUT ICON">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script type="text/javascript" src="dist/xmorse.min.js"></script>
+
+<style type="text/css">
+* { 
+  /*font-size:15px; */
+  font-family:Verdana,宋体; 
+}
+body {
+    /*margin-top: 70px;*/
+    /*margin-bottom: 50px;*/
+    background-color: #f8f8f8;
+}
+.divider {
+    width: 100%;
+    background: #CCC;
+    height: 1px;
+    margin: 25px 0;
+}
+
+.table {
+    margin-bottom: 35px;
+}
+
+.table th,
+.table td {
+    border-bottom: 2px #d1d1d1 solid;
+    padding: 8px 12px;
+    white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.table td {
+    border-bottom: 1px #d4d4d4 solid
+}
+
+.table.table-striped tbody tr:nth-child(2n+1) {
+    background-color: #f3f3f3
+}
+
+.table.table-bordered {
+    border: 1px #CCC solid
+}
+
+.table.table-bordered td,
+.table.table-bordered th {
+    border: 1px #CCC solid
+}
+
+</style>
+  </head>
+  <body>
+	<div id="app-1">
+  		<textarea cols="200" rows="30" v-model="message" style="width: 95%">
+  			{{ message }}
+		</textarea>
+    <p> </p>
+  		<button v-on:click="hex2str">编码(Encode)</button>
+  		<button v-on:click="str2hex">解码(Decode)</button>
+	</div>
+
+  <div class="divider"></div>
+          <h4 class="explainer">莫尔斯电码加密列表 | Morse Code List</h4>
+          <h5>一、26个字母的莫尔斯电码加密</h5>
+          <table class="table table-striped table-bordered">
+        <tbody>
+          <tr>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+          </tr>
+          <tr>
+            <th>A</th>
+            <td>．━</td>
+            <th>B</th>
+            <td>━ ．．．</td>
+            <th>C</th>
+            <td>━ ．━ ．</td>
+            <th>D</th>
+            <td>━ ．．</td>
+          </tr>
+          <tr>
+            <th>E</th>
+            <td>．</td>
+            <th>F</th>
+            <td>．．━ ．</td>
+            <th>G</th>
+            <td>━ ━ ．</td>
+            <th>H</th>
+            <td>．．．．</td>
+          </tr>
+          <tr>
+            <th>I</th>
+            <td>．．</td>
+            <th>J</th>
+            <td>．━ ━ ━</td>
+            <th>K</th>
+            <td>━ ．━</td>
+            <th>L</th>
+            <td>．━ ．．</td>
+          </tr>
+          <tr>
+            <th>M</th>
+            <td>━ ━</td>
+            <th>N</th>
+            <td>━ ．</td>
+            <th>O</th>
+            <td>━ ━ ━</td>
+            <th>P</th>
+            <td>．━ ━ ．</td>
+          </tr>
+          <tr>
+            <th>Q</th>
+            <td>━ ━ ．━</td>
+            <th>R</th>
+            <td>．━ ．</td>
+            <th>S</th>
+            <td>．．．</td>
+            <th>T</th>
+            <td>━</td>
+          </tr>
+          <tr>
+            <th>U</th>
+            <td>．．━</td>
+            <th>V</th>
+            <td>．．．━</td>
+            <th>W</th>
+            <td>．━ ━</td>
+            <th>X</th>
+            <td>━ ．．━</td>
+          </tr>
+          <tr>
+            <th>Y</th>
+            <td>━ ．━ ━</td>
+            <th>Z</th>
+            <td>━ ━ ．．</td>
+            <th>　</th>
+            <td>　</td>
+            <th>　</th>
+            <td>　</td>
+          </tr>
+        </tbody>
+      </table>
+          <h5>二、数字的莫尔斯电码加密</h5>
+          <table class="table table-striped table-bordered">
+        <tbody>
+          <tr>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+          </tr>
+          <tr>
+            <th>0</th>
+            <td>━ ━ ━ ━ ━</td>
+            <th>1</th>
+            <td>．━ ━ ━ ━</td>
+            <th>2</th>
+            <td>．．━ ━ ━</td>
+            <th>3</th>
+            <td>．．．━ ━</td></tr>
+          <tr>
+            <th>4</th>
+            <td>．．．．━</td>
+            <th>5</th>
+            <td>．．．．．</td>
+            <th>6</th>
+            <td>━ ．．．．</td>
+            <th>7</th>
+            <td>━ ━ ．．．</td></tr>
+          <tr>
+            <th>8</th>
+            <td>━ ━ ━ ．．</td>
+            <th>9</th>
+            <td>━ ━ ━ ━ ．</td>
+            <th>　</th>
+            <td>　</td>
+            <th>　</th>
+            <td>　</td>
+          </tr>
+        </tbody>
+      </table>
+          <h5>三、标点符号的莫尔斯电码加密</h5>
+          <table class="table table-striped table-bordered">
+        <tbody>
+          <tr>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td>
+            <th width="8%"><strong>字符</strong></th>
+            <td width="17%"><strong>电码符号</strong></td></tr>
+          <tr>
+            <th title="句号">.</th>
+            <td title="句号">．━ ．━ ．━</td>
+            <th title="冒号">:</th>
+            <td title="冒号">━ ━ ━ ．．．</td>
+            <th title="逗号">,</th>
+            <td title="逗号">━ ━ ．．━ ━</td>
+            <th title="分号">;</th>
+            <td title="分号">━ ．━ ．━ ．</td></tr>
+          <tr>
+            <th title="问号">?</th>
+            <td title="问号">．．━ ━ ．．</td>
+            <th title="等号">=</th>
+            <td title="等号">━ ．．．━</td>
+            <th title="省略符">'</th>
+            <td title="省略符">．━ ━ ━ ━ ．</td>
+            <th title="斜线">/</th>
+            <td title="斜线">━ ．．━ ．</td></tr>
+          <tr>
+            <th title="叹号">!</th>
+            <td title="叹号">━ ．━ ．━ ━</td>
+            <th title="连字号">━ </th>
+            <td title="连字号">━ ．．．．━</td>
+            <th title="下划线">_</th>
+            <td title="下划线">．．━ ━ ．━</td>
+            <th title="双引号">"</th>
+            <td title="双引号">．━ ．．━ ．</td></tr>
+          <tr>
+            <th title="前括号">(</th>
+            <td title="前括号">━ ．━ ━ ．</td>
+            <th title="后括号">)</th>
+            <td title="后括号">━ ．━ ━ ．━</td>
+            <th title="美元">$</th>
+            <td title="美元">．．．━ ．．━</td>
+            <th title="">&amp;</th>
+            <td title="">． ．．．</td></tr>
+          <tr>
+            <th title="">@</th>
+            <td title="">．━ ━ ．━ ．</td>
+            <th>　</th>
+            <td>　</td>
+            <th>　</th>
+            <td>　</td>
+            <th>　</th>
+            <td>　</td>
+          </tr>
+        </tbody>
+      </table>
+</body>
+
+<script type="text/javascript">
+	var app1 = new Vue({
+  		el: '#app-1',
+  		data: {
+    		message: ''
+  		},
+  		methods: {
+    		hex2str: function () {
+      			var str = this.message
+      			this.message = xmorse.encode(str)
+    		},
+    		str2hex: function () {
+      			var hexStr = this.message
+      			this.message = xmorse.decode(hexStr)
+    		}
+  		}
+	})
+
+</script>
+  </body>
+</html>

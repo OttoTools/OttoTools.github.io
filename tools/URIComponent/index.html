@@ -16,7 +16,7 @@
   </head>
   <body>
 	<div id="app-1">
-  		<textarea cols="200" rows="30" v-model="message">
+  		<textarea cols="200" rows="30" v-model="message" style="width: 95%">
   			{{ message }}
 		</textarea>
     <p> </p>
@@ -42,27 +42,6 @@
   		}
 	})
 
-	function strToHexCharCode(str) {
-		if(str === "")
-			return "";
-		var hexCharCode = [];
-		for(var i = 0; i < str.length; i++) {
-			hexCharCode.push((str.charCodeAt(i)).toString(16));
-		}
-	return hexCharCode.join("");
-	}
-
-	function hexCharCodeToStr(hexCharCodeStr) {
-		var trimedStr = hexCharCodeStr.trim();
-		var rawStr = trimedStr;
-		var curCharCode;
-		var resultStr = [];
-		for(var i = 0; i < rawStr.length;i = i + 2) {
-			curCharCode = parseInt(rawStr.substr(i, 2), 16); // ASCII Code Value
-			resultStr.push(String.fromCharCode(curCharCode));
-		}
-	return resultStr.join("");
-	}
 </script>
   </body>
 </html>
