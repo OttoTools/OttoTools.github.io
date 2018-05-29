@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+	<html lang = "zh-cn">
+	<head>
+	<meta charset = "utf-8">
+	<title>二维码工具</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://wuotto.github.io/HomePage/images/favicon.ico" />
+	<style type="text/css">
+    body{
+        background-color: #EDEDF2;
+    }
+    .Div{
+        /*background-color: yellow;*/
+        width: 100%;
+        height: 300px;
+        display: column;
+    }
+	.mainDiv{
+        width: 100%;
+        height: 280px;
+        display: flex;
+    }
+    .imgDiv{
+        width: 30%;
+        height: 100%;
+        /*background-color: white;*/
+        margin: 0 auto;
+    }
+    .imgContainer{
+        width: 200px;
+        height: 200px;
+        margin-left: 10%;
+        /*margin-top: 20px;*/
+        padding-bottom: 100%;
+        overflow:hidden;
+        position:relative;
+    }
+    .container{   
+        width : 160px;   
+        height : 160px;
+    }
+    .container div{   
+        width : 40px;   
+        height : 40px;   
+        float:left;
+        }
+    .color1 {  
+        background-color : #1faaf1;/*蓝色*/
+        }
+    .color2 {  
+        background-color : #77ff77;/*绿色*/
+    }
+    .color3 {  
+        background-color : #ff0f11;/*红色*/
+        }
+    .color4 {  
+        background-color : #000000;
+    }
+    .color5 {  
+        background-color : #ffffff;/*浅灰色*/
+    }
+    .color6 {  
+        background-color : #6eeff0;
+    }
+    .color7 {  
+        background-color : #FeF100;
+    }
+    .color8 {  
+        background-color : #Fe11aF;
+        }
+    .color9 {  
+        background-color : #aaF1af;
+        }
+    .color10 {
+        background-color: #FFC0CB;/*粉红*/
+    }
+    .color11 {
+        background-color: #B0C4DE;/*淡钢蓝*/
+    }
+    .color12 {
+        background-color: #20B2AA;/*浅海洋绿*/
+    }
+    .color13 {
+        background-color: #FFFFE0;/*浅黄色*/
+    }
+    .color14 {
+        background-color: #D2691E;/*巧克力*/
+    }
+    .color15 {
+        background-color: #D8BFD8;/*蓟*/
+    }
+    .color16 {
+        background-color: #E6E6FA;/*淡紫色*/
+    }
+    #fTarget{   
+        width : 40px;   
+        height : 40px;   
+        border : 1px solid black;
+    }
+    #bgTarget{   
+        width : 40px;   
+        height : 40px;   
+        border : 1px solid black;
+        margin-left: 10px;
+    }
+    .tipText{
+        font-size: 15px;
+        color: #A9A9A9;
+    }
+	</style>
+        
+	</head>
+	<body>
+        <div class="Div">
+            <p class="tipText">推荐150字以内，支持普通文本/网址/EMAIL地址</p>
+            <div class="mainDiv">
+                <textarea id="text_text" rows="5" cols="30" style="width: 70%;height: 80%">https://wuotto.github.io/HomePage/</textarea>
+            <div class="imgDiv">
+                
+                <div class="imgContainer">
+                    <img class="qrImg" id="qrImg" src="">    
+                </div>    
+            </div>
+            </div>
+            
+        </div>
+
+        <div class="container" id="container" style="display: none;"> 
+        <div class="color1" onmousedown="setTargetColor(this)"></div> 
+        <div class="color2" onmousedown="setTargetColor(this)"></div> 
+        <div class="color3" onmousedown="setTargetColor(this)"></div> 
+        <div class="color4" onmousedown="setTargetColor(this)"></div> 
+        <div class="color5" onmousedown="setTargetColor(this)"></div> 
+        <div class="color6" onmousedown="setTargetColor(this)"></div> 
+        <div class="color7" onmousedown="setTargetColor(this)"></div> 
+        <div class="color8" onmousedown="setTargetColor(this)"></div> 
+        <div class="color9" onmousedown="setTargetColor(this)"></div>
+        <div class="color10" onmousedown="setTargetColor(this)"></div>
+        <div class="color11" onmousedown="setTargetColor(this)"></div>
+        <div class="color12" onmousedown="setTargetColor(this)"></div>
+        <div class="color13" onmousedown="setTargetColor(this)"></div>
+        <div class="color14" onmousedown="setTargetColor(this)"></div>
+        <div class="color15" onmousedown="setTargetColor(this)"></div>
+        <div class="color16" onmousedown="setTargetColor(this)"></div>  
+    </div>  
+    <p class="tipText">默认是白底黑字</p>
+    <div style="display: flex;height: 50px;">
+        <div id="fTarget" onmousedown="selectFColor(this)">
+        <p style="font-size: 12px; text-align: center; margin-top: 0px;">选择前景色</p>
+    </div>
+
+    <div id="bgTarget" onmousedown="selectBGColor(this)">
+        <p style="font-size: 12px; text-align: center; margin-top: 0px;">选择背景色</p>
+    </div>
+    </div>
+
+    <button onclick="getQRcode()" style="margin-top: 10px;">生成二维码</button>
+        
+
+<script type="text/javascript">
+var isFColor = 1;
+var fColorStr = "#000000";
+var bgColorStr = "#ffffff";
+
+function getQRcode() {
+
+    document.getElementById("container").style.display="none";//隐
+
+    var obj = document.getElementById('qrImg');
+    obj.src = "";
+
+    var fColorStrResult = fColorStr.substr(1,6);
+    var bgColorStrResult = bgColorStr.substr(1,6);
+
+    if (!fColorStrResult) {
+        fColorStrResult = "000000";
+    }
+
+    if (!bgColorStrResult) {
+        bgColorStrResult = "ffffff";
+    }
+
+    var inputStr = document.getElementById('text_text').value;
+
+    var qrcodeStr = "http://qr.liantu.com/api.php?text=" + inputStr + "&bg=" + bgColorStrResult + "&fg=" + fColorStrResult + "&w=200&m=10&el=l";
+
+    
+    obj.src = qrcodeStr;
+}
+
+
+function setTargetColor(obj){ 
+
+var cssStyle = document.defaultView.getComputedStyle(obj, null),
+resultBg = cssStyle.getPropertyValue('background-color');
+
+var resultBgColor = parserColor(resultBg);
+
+
+if (isFColor == 1) {
+    var fTarget = document.getElementById("fTarget"); 
+    fTarget.style.backgroundColor = obj.style.backgroundColor;
+    fTarget.className = obj.className;
+    // document.getElementById("fColor").innerHTML = "前景色：" + resultBgColor;
+    fColorStr = resultBgColor;
+}else if (isFColor == 2) {
+    var bgTarget = document.getElementById("bgTarget"); 
+    bgTarget.style.backgroundColor = obj.style.backgroundColor;
+    bgTarget.className = obj.className;
+    // document.getElementById("bgColor").innerHTML = "背景色：" + resultBgColor;
+
+    bgColorStr = resultBgColor;
+}
+document.getElementById("container").style.display="none";//隐
+
+}
+//前景色
+function selectFColor() {
+    isFColor = 1;
+    document.getElementById("container").style.display="";//显
+}
+//背景色
+function selectBGColor() {
+    isFColor = 2;
+    document.getElementById("container").style.display="";//显
+}
+
+/** 
+ * [parserColor 颜色转换为十六进制] 
+ * @param  {[String]} value [需要转换的颜色值] 
+ * @return {[String]}       [返回转换后的颜色值,#0000FF形式] 
+ */  
+function parserColor (value){  
+    var  
+    str      = "",  
+    arr      = [],  
+    arri     = "",  
+    i        = 0,  
+    vlen     = value.length,  
+    colorObj = {  
+        "black":"000000",  
+        "red":"0000FF",  
+        "blue":"FF0000",  
+        "white":"FFFFFF",  
+        "yellow":"FFFF00",  
+        "orange":"FFA500"  
+    };  
+  
+    //rgb(0,0,255)  
+    if(/rgb/.test(value)){  
+        arr = value.match(/\d+/g);  
+        vlen = arr.length;  
+        for(; i < vlen ; i++){  
+            arri = parseInt(arr[i]);  
+            //转换为十六进制  
+            str += arri < 10 ? "0" + arri.toString(16) : arri.toString(16);  
+        }  
+    }else if(/^#/.test(value)){  
+        //#00f  
+        if(vlen == 4){  
+            str = value.replace(/[A-Za-z0-9]/g,"$&$&");  
+        }else if(vlen == 7){  
+            //#FF0000  
+            str = value.replace(/^#([A-Za-z0-9]*)/,"$1");  
+        }else{  
+            str = "FFFFFF";  
+        }  
+    }else{  
+        //red/orange  
+        value = value.toLowerCase();  
+        str = colorObj[value] ? colorObj[value] : "FFFFFF";//不匹配默认为白色  
+    }  
+    return "#" + str.toUpperCase();  
+}
+getQRcode();
+    </script>
+    </body>
+    </html>
