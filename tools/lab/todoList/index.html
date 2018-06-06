@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>ToDo</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <link rel="shortcut icon" href="https://ws1.sinaimg.cn/large/006tNc79gy1fn8btng9dwj303k03k742.jpg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="stylesheet" href="https://g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+  <style type="text/css">
+    html {
+      overflow: hidden !important;
+    }
+
+    .bar .button-link {
+      padding: 0px 8px !important;
+    }
+
+    .ToDo {
+      font-family: "微软雅黑";
+      letter-spacing: -1px;
+      font-weight: 300;
+      font-size: 36px;
+      margin: 0px;
+      position: relative;
+    }
+
+    #JsonDiv {
+      height: 107px;
+      overflow: scroll;
+      color: #333030;
+      background-color: #f5f4f4;
+      font-size: 8px;
+      border-radius: 2px;
+      padding: 4px;
+      margin: 8px 0px;
+      width: 100%;
+      resize: none;
+      box-shadow: 0px 0px 16px #f7f7f7;
+      border: 1px solid #f7f7f7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <!-- 你的html代码 -->
+    <header class="bar bar-nav">
+      <button onclick="getJson()" class="button button-link button-nav pull-left open-panel">
+        <span class="icon icon-settings">
+        </span>
+      </button>
+      <button onclick="Add()" class="button button-link button-nav pull-right">
+        <span class="icon icon-edit">
+        </span>
+      </button>
+      <h1 class="title">
+        ToDo
+      </h1>
+    </header>
+    <div class="content">
+      <div id="titleTip" class="content-block-title" style="text-transform: none; margin: 10px 10px;">
+      </div>
+      <div class="list-block">
+        <ul id="ListContainer">
+        </ul>
+      </div>
+    </div>
+    <!-- 你的html代码 -->
+  </div>
+
+  <div class="panel-overlay"></div>
+
+  <!-- Left Panel with Reveal effect -->
+  <div class="panel panel-left panel-reveal theme-dark" id='panel-left-demo'>
+    <div class="content-block">
+      <p style="text-align: right;">
+        <a href="#" class="close-panel">
+          关闭
+        </a>
+      </p>
+      <p class="ToDo" style="position: relative;">
+        ToDo
+        <span style="position:absolute; top:1px; font-size: 17px;">
+          &copy;
+          <span>
+      </p>
+      <textarea rows="25" readonly="readonly" id="JsonDiv"></textarea>
+      <p style="text-align: right; font-size: 11px; margin: 0">
+        Otto
+      </p>
+      <p>
+        <a onclick="Add()" href="#" class="button button-fill">
+          添加一条ToDo
+        </a>
+      </p>
+      <p>
+        <a onclick="resetAll()" href="#" class="button button-fill button-warning">重置所有状态</a>
+      </p>
+      <p>
+        <a onclick="ClearAll()" href="#" class="button button-fill button-danger">
+          移除所有ToDo
+        </a>
+      </p>
+      
+    </div>
+  </div>
+  <script type='text/javascript' src='https://g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'>
+  </script>
+  <script type='text/javascript' src='https://g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'>
+  </script>
+  <script>
+    $(function () {
+      $.showIndicator();
+      setTimeout(function () {
+        $.hideIndicator();
+        $.toast("Nice to meet you");
+        getList();
+      },
+        1000);
+    });
+    //去除所有的json数据
+    function getJson() {
+      $("#JsonDiv").val(localStorage.getItem("ToDolocalStorage"));
+      setTimeout(function () {
+        $("#JsonDiv").scrollTop($("#JsonDiv")[0].scrollHeight);
+      }, 1000);
+    }
+    //重置所有的状态
+    function resetAll() {
+      $.confirm('此操作会将所有的状态设置为未选中！', function () {
+        $.showIndicator();
+        setTimeout(function () {
+          $.hideIndicator();
+          $(".close-panel").click();
+          var msg = localStorage.getItem("ToDolocalStorage");
+          var json = eval(msg);
+          for (var i = 0; i < json.length; i++) {
+            json[i].checked = "0";
+
+          }
+          localStorage.ToDolocalStorage = JSON.stringify(json);
+          getList();
+          $.toast("操作成功");
+        },
+          1000);
+      });
+    }
+    //添加按钮的点击操作
+    function Add() {
+      $.prompt('Add a ToDo ?', function (value) {
+        if (value == "") {
+          $.toast("不能为空");
+          return false;
+        }
+        AddToDos(value);
+      });
+    }
+    //add todo
+    function AddToDos(value) {
+      $.showIndicator();
+      var arr;
+      if (localStorage.getItem("ToDolocalStorage") == null || localStorage.getItem("ToDolocalStorage") == "[]") {
+        arr = [];
+        arr.push({ 'text': value, 'id': newGuid(), 'checked': '0' });
+        localStorage.ToDolocalStorage = JSON.stringify(arr);
+      } else {
+        var arr = JSON.parse(localStorage.getItem('ToDolocalStorage'));
+        arr.push({ 'text': value, 'id': newGuid(), 'checked': '0' });
+        localStorage.ToDolocalStorage = JSON.stringify(arr);
+      }
+      getList();
+      setTimeout(function () {
+        $.hideIndicator();
+      },
+        400);
+    }
+    //加载列表
+    function getList() {
+      $("#ListContainer").html("");
+      var msg = localStorage.getItem("ToDolocalStorage");
+      if (msg == null || msg == "[]") {
+        $("#titleTip").html("<p><a href='#'' class='button button-light' onClick='Add()'>添加第一条ToDo吧</a></p>");
+      } else {
+        $("#titleTip").html("今天的任务都完成了吗?");
+        var json = eval(msg);
+        var str = "";
+        var checkboxStr = "";
+        var decorationStr = "style='text-decoration:line-through'";
+        for (var i = 0; i < json.length; i++) {
+          if (json[i].checked == "1") {
+            checkboxStr = "<input onchange=\"checkChange('" + json[i].id + "')\"   type='checkbox' checked='checked' name='my-checkbox'>";
+          } else {
+            decorationStr = "style='text-decoration:none'";
+            checkboxStr = "<input onchange=\"checkChange('" + json[i].id + "')\"  type='checkbox' name='my-checkbox'>";
+          }
+          str += "<li "+decorationStr+" id='" + json[i].id + "' style='margin-bottom: 5px;'>" + "<label style='border-left: 6px solid " + getRandomColor() + "' class='label-checkbox item-content'>" + checkboxStr + "<div class='item-media'>" + "<i class='icon icon-form-checkbox'>" + "</i>" + "</div>" + "<div class='item-inner'>" + json[i].text + "<span style='position: absolute; right: 5px;' onclick=\"DeleteMe('" + json[i].id + "')\" class='icon icon-remove'></span>" + "<div>" + "</label>" + "</li>"
+        }
+        $("#ListContainer").html(str);
+      }
+      $(".close-panel").click();
+    }
+    //改变状态
+    function checkChange(id) {
+      var arr = JSON.parse(localStorage.getItem("ToDolocalStorage"));
+      var json = eval(arr);
+      for (var i = 0; i < json.length; i++) {
+        if (json[i].id == id) {
+          if (json[i].checked == "0") {
+            json[i].checked = "1"
+            $("#"+id).css("text-decoration","line-through");
+          } else {
+            json[i].checked = "0"
+            $("#"+id).css("text-decoration","none");
+          }
+          localStorage.ToDolocalStorage = JSON.stringify(json); //保存到localStorage
+          //getList(); 可刷新也可不刷新
+        }
+      }
+    }
+    //删除
+    function DeleteMe(id) {
+      $("#"+id).remove();
+      $.showIndicator();
+          setTimeout(function () {
+            $.hideIndicator();
+            var arr = JSON.parse(localStorage.getItem("ToDolocalStorage"));
+            var json = eval(arr);
+            for (var i = 0; i < json.length; i++) {
+              if (json[i].id == id) {
+                json.splice(json.indexOf(json[i]), 1);
+              }
+            }
+            localStorage.ToDolocalStorage = JSON.stringify(json); //保存到localStorage
+            getList();
+            $.toast("删除成功");
+          },
+            400);
+    }
+    //随机颜色
+    var getRandomColor = function () {
+      return '#' + (function (color) {
+        return (color += '0123456789abcdef'[Math.floor(Math.random() * 16)]) && (color.length == 6) ? color : arguments.callee(color);
+      })('');
+    }
+    //清除localstorage
+    function ClearAll() {
+      $.confirm('此操作将移除所有的localStorage，不可恢复！', function () {
+        localStorage.removeItem("ToDolocalStorage");
+        $.showIndicator();
+        setTimeout(function () {
+          $.hideIndicator();
+          $(".close-panel").click();
+          getList();
+          $.toast("操作成功");
+        },
+          1000);
+      });
+    }
+    //生成guid
+    function newGuid() {
+      var guid = "";
+      for (var i = 1; i <= 32; i++) {
+        var n = Math.floor(Math.random() * 16.0).toString(16);
+        guid += n;
+        if ((i == 8) || (i == 12) || (i == 16) || (i == 20))
+          guid += "-";
+      }
+      return guid;
+    }
+  </script>
+</body>
+
+</html>
